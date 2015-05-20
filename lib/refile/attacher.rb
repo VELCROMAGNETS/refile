@@ -76,6 +76,8 @@ module Refile
       else
         cache!(value)
       end
+
+      mark_as_changed(:id)
     end
 
     def retrieve!(value)
@@ -155,6 +157,11 @@ module Refile
     end
 
   private
+
+    def mark_as_changed(column)
+      m = "#{name}_#{column}_will_change!"
+      record.public_send(m) if record.respond_to?(m)
+    end
 
     def read(column)
       m = "#{name}_#{column}"
